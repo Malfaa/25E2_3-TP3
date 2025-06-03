@@ -29,7 +29,7 @@ public class Exercicio3 {
             var responseCode = connection.getResponseCode();
             System.out.println("Código resposta: " + responseCode);
 
-            reader = (responseCode > 99 && responseCode < 400) ?
+            reader = (responseCode >= HttpURLConnection.HTTP_OK && responseCode < HttpURLConnection.HTTP_MULT_CHOICE) ?
                     new BufferedReader(new InputStreamReader(connection.getInputStream())) :
                     new BufferedReader(new InputStreamReader(connection.getErrorStream()));
 

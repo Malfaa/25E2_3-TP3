@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class Exercício4 {
+public class Exercicio4 {
     public static void main(String[] args){
         try {
             paramFic();
@@ -19,16 +19,17 @@ public class Exercício4 {
 
     private static void paramFic() throws URISyntaxException, IOException {
         BufferedReader reader;
-        StringBuilder response = null;
+        StringBuilder response = new StringBuilder();
         URL url = new URI("https://apichallenges.eviltester.com/sim/entities?categoria=teste&limite=5").toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         try{
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "applicaton/json");
-            var responseCode = connection.getResponseCode();
+            int responseCode = connection.getResponseCode();
+
             System.out.println("Código resposta: " + responseCode);
 
-            if(responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED){
+            if(responseCode >= HttpURLConnection.HTTP_OK && responseCode < 300){
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String inputLine;
                 while((inputLine = reader.readLine()) != null) {

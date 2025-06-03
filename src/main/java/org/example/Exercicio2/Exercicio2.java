@@ -26,10 +26,11 @@ public class Exercicio2 {
             connection.setRequestProperty("Accept", "application/json");
 
             BufferedReader reader;
-            var responseCode = connection.getResponseCode();
-            System.out.println("Código resposta: " + responseCode);
+            int  responseCode = connection.getResponseCode();
 
-            if (responseCode == HttpURLConnection.HTTP_OK) {
+            if (responseCode >= HttpURLConnection.HTTP_OK && responseCode < 300) {
+                System.out.println("Código resposta: " + responseCode);
+
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String inputLine;
                 while ((inputLine = reader.readLine()) != null) {
