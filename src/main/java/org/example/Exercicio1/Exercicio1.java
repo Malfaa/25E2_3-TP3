@@ -28,7 +28,7 @@ public class Exercicio1 {
             System.out.println("Reposta código: " + responseCode);
 
             BufferedReader reader;
-            if(100 <= responseCode && responseCode <=399) {
+            if(responseCode >= HttpURLConnection.HTTP_OK && responseCode < HttpURLConnection.HTTP_MULT_CHOICE) {
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             }else {
                 reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));

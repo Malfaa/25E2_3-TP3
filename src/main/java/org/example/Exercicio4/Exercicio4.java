@@ -29,7 +29,7 @@ public class Exercicio4 {
 
             System.out.println("Código resposta: " + responseCode);
 
-            if(responseCode >= HttpURLConnection.HTTP_OK && responseCode < 300){
+            if(responseCode >= HttpURLConnection.HTTP_OK && responseCode < HttpURLConnection.HTTP_MULT_CHOICE){
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String inputLine;
                 while((inputLine = reader.readLine()) != null) {
@@ -37,6 +37,10 @@ public class Exercicio4 {
                 }
             }else {
                 reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                String inputLine;
+                while((inputLine = reader.readLine()) != null) {
+                    response.append(inputLine).append("\n");
+                }
             }
 
             System.out.println("Resposta do Request: " + response);

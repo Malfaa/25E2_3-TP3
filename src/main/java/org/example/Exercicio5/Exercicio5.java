@@ -20,7 +20,7 @@ public class Exercicio5 {
     }
     private static void novaEntidade() throws URISyntaxException, IOException {
         String jsonInputString = "{\"name\": \"aluno\"}";
-        BufferedReader reader = null;
+        BufferedReader reader;
         StringBuilder response = new StringBuilder();
         URL url = new URI("https://apichallenges.eviltester.com/sim/entities").toURL();
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -38,27 +38,20 @@ public class Exercicio5 {
             var responseCode = connection.getResponseCode();
             System.out.println(responseCode);
 
-            System.out.println("Código Resposta: " + response);
+            System.out.println("Código Resposta: " + responseCode);
 
             if (responseCode >= HttpURLConnection.HTTP_OK && responseCode < HttpURLConnection.HTTP_MULT_CHOICE) {
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
             } else {
-                if (connection.getErrorStream() != null) {
-                    reader = new BufferedReader(new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8));
-                } else {
-                    System.out.println("Nenhum corpo de resposta ou erro disponível para o código de status: " + responseCode);
-                }
+                reader = new BufferedReader(new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8));
             }
 
-            if (reader != null) {
-                String inputLine;
-                while ((inputLine = reader.readLine()) != null) {
-                    response.append(inputLine.trim());
-                }
+            String inputLine;
+            while ((inputLine = reader.readLine()) != null) {
+                response.append(inputLine.trim());
             }
 
             System.out.println("Resposta: " + response);
-            assert reader != null;
             reader.close();
 
         }catch(Exception e) {

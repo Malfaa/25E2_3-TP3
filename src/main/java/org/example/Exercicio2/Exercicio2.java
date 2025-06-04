@@ -11,7 +11,7 @@ import java.net.URL;
 public class Exercicio2 {
     public static void main(String[] args) {
         try {
-            conexao(4);
+            conexao(8);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -28,7 +28,7 @@ public class Exercicio2 {
             BufferedReader reader;
             int  responseCode = connection.getResponseCode();
 
-            if (responseCode >= HttpURLConnection.HTTP_OK && responseCode < 300) {
+            if (responseCode >= HttpURLConnection.HTTP_OK && responseCode < HttpURLConnection.HTTP_MULT_CHOICE) {
                 System.out.println("Código resposta: " + responseCode);
 
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
