@@ -2,26 +2,26 @@ package org.example.Exercicio12;
 
 import java.net.HttpURLConnection;
 
-import static org.example.HttpResponseUtil.getConnection;
-import static org.example.HttpResponseUtil.respostaRequisicao;
+import static org.example.HttpResponseUtil.*;
 
 public class Exercicio12 {
-    public static int responseCode;
     static StringBuilder resposta;
+    static int id;
+    static StringBuilder isbn;
     public static void main (String[] args){
         try{
             getAll();
             getISBN();
             post();
             put();
-            delete(resposta.toString());
+            delete();
 
         }catch(Exception e){
             System.out.println("Mensagem de error: " + e.getMessage());
         }
     }
 
-    public static void getAll() { //OK
+    public static void getAll() {
         try{
             HttpURLConnection connection = getConnection("https://apichallenges.eviltester.com/simpleapi/items","GET");
 
@@ -38,9 +38,9 @@ public class Exercicio12 {
         try{
             HttpURLConnection connection = getConnection("https://apichallenges.eviltester.com/simpleapi/randomisbn", "GET");
             StringBuilder jsonResponse = respostaRequisicao(connection);
-            System.out.println("Resposta JSON do ISBN: " + jsonResponse);
+            System.out.println("Resposta ISBN: " + jsonResponse);
 
-            resposta = new StringBuilder(jsonResponse);
+            isbn = new StringBuilder(jsonResponse);
 
             connection.disconnect();
         }catch(Exception e){
@@ -50,11 +50,14 @@ public class Exercicio12 {
 
     public static void post() {
         try{
-            String jsonInputField = String.format("{ \"type\": \"book\",\"isbn13\": \"%s\",\"price\": 5.99,\"numberinstock\": 5}", resposta);
+            String jsonInputField = String.format("{ \"type\": \"book\",\"isbn13\": \"%s\",\"price\": 5.99,\"numberinstock\": 5}", isbn);
 
             HttpURLConnection connection = getConnection("https://apichallenges.eviltester.com/simpleapi/items","POST");
 
-            System.out.println(respostaRequisicao(connection, jsonInputField));
+            resposta = respostaRequisicao(connection, jsonInputField);
+            id = regexId(resposta);
+            System.out.println(resposta);
+
             System.out.println(connection.getResponseCode());
             connection.disconnect();
         }catch(Exception e){
@@ -64,8 +67,9 @@ public class Exercicio12 {
 
     public static void put() {
         try{
-            HttpURLConnection connection = getConnection("https://apichallenges.eviltester.com/simpleapi/items","PUT");
-            String jsonInputField = String.format("{ \"type\": \"Livro diferente\",\"isbn13\": \"%s\",\"price\": 5.99,\"numberinstock\": 50}", resposta);
+            String jsonInputField = String.format("{ \"id\": %d,\"type\": \"blu-ray\",\"isbn13\": \"%s\",\"price\": 30.33,\"numberinstock\": 12}",id,  isbn);
+
+            HttpURLConnection connection = getConnection(String.format("https://apichallenges.eviltester.com/simpleapi/items/%d", id),"PUT");
 
             System.out.println(respostaRequisicao(connection, jsonInputField));
             System.out.println(connection.getResponseCode());
@@ -75,13 +79,14 @@ public class Exercicio12 {
         }
     }
 
-    public static void delete(String isbn) {
+    public static void delete() {
         try{
-            HttpURLConnection connection = getConnection(String.format("https://apichallenges.eviltester.com/simpleapi/items/%s", resposta),"DELETE");
-            responseCode = connection.getResponseCode();
-            System.out.println(responseCode);
+            HttpURLConnection connection = getConnection(String.format("https://apichallenges.eviltester.com/simpleapi/items/%d", id),"DELETE");
 
-            System.out.println(respostaRequisicao(connection));
+            respostaRequisicao(connection);
+            System.out.println("Item removido com sucesso!");
+            System.out.println(connection.getResponseCode());
+
             connection.disconnect();
         }catch(Exception e){
             System.out.println("Erro no DELETE: " + e.getMessage());

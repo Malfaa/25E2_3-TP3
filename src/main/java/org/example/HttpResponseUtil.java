@@ -9,6 +9,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public final class HttpResponseUtil{
@@ -25,10 +27,10 @@ public final class HttpResponseUtil{
         conn.setRequestMethod(requestMethod);
         conn.setRequestProperty("Accept", "application/json");
 
-        if (requestMethod.equals("POST")) {
+        if (requestMethod.equals("POST") || requestMethod.equals("PUT")) {
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             conn.setDoOutput(true);
-        }else if(requestMethod.equals("PUT") || requestMethod.equals("DELETE")) {
+        }else if(requestMethod.equals("DELETE")) {
             conn.setDoOutput(true);
         }
 
@@ -57,7 +59,7 @@ public final class HttpResponseUtil{
         String input;
         StringBuilder response = new StringBuilder();
 
-        if(connection.getRequestMethod().equals("POST")){
+        if(connection.getRequestMethod().equals("POST") || connection.getRequestMethod().equals("PUT")){
             gravarJson(connection, json);
         }
 
@@ -81,17 +83,18 @@ public final class HttpResponseUtil{
         }
     }
 
-    public static void verificarEntidade(String urlParaGet) throws URISyntaxException, IOException {
-        HttpURLConnection getConnection = null;
-        try {
-            getConnection = HttpResponseUtil.getConnection(urlParaGet, "GET");
-            int responseCode = getConnection.getResponseCode();
-            System.out.println("Código Resposta GET: " + responseCode);
-            System.out.println("Resposta JSON GET: " + HttpResponseUtil.respostaRequisicao(getConnection));
-        } finally {
-            if (getConnection != null) {
-                getConnection.disconnect();
-            }
+    public static int regexId(StringBuilder str){
+        String regex = "\"id\":\\s*(\\d+)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        String idValor = "";
+
+        if (matcher.find()) {
+            idValor = matcher.group(1);
+            System.out.println(idValor);
+        } else {
+            System.out.println("ID não encontrado.");
         }
+        return Integer.parseInt(idValor);
     }
 }

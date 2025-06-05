@@ -22,6 +22,7 @@ public class Exercicio8 {
 
         System.out.println(respostaRequisicao(connection, jsonInputString));
         System.out.println("Código de resposta: " + connection.getResponseCode());
+        System.out.println("Método usado: " + connection.getRequestMethod());
         connection.disconnect();
     }
 

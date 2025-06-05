@@ -23,6 +23,8 @@ public class Exercicio7 {
         String jsonInputString = "{\"name\": \"atualizado\"}";
         System.out.println("Resposta JSON: " + respostaRequisicao(connection, jsonInputString));
         System.out.println("Código resposta: " + connection.getResponseCode());
+        System.out.println("Método usado: " + connection.getRequestMethod());
+
 
         connection.disconnect();
     }
