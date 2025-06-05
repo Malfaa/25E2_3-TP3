@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 
-import static org.example.HttpResponseUtil.*;
+import static org.example.HttpResponseUtil.getConnection;
+import static org.example.HttpResponseUtil.respostaRequisicao;
 
 public class Exercicio9 {
     public static void main (String[] args){
